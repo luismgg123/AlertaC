@@ -1,0 +1,77 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="yolo.suaj.alertac.MainActivityFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TabHost
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tabHost"
+        android:layout_gravity="left|top">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="START"
+                        android:id="@+id/button2" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="END"
+                        android:id="@+id/button3"
+                        android:layout_gravity="center_horizontal" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ENVIAR "
+                        android:id="@+id/button"
+                        android:layout_gravity="right" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+</FrameLayout>
