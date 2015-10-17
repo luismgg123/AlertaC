@@ -35,22 +35,9 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="START"
-                        android:id="@+id/button2" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="END"
-                        android:id="@+id/button3"
+                        android:text="Muestra Tu Ubicación"
+                        android:id="@+id/bmaps"
                         android:layout_gravity="center_horizontal" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ENVIAR "
-                        android:id="@+id/button"
-                        android:layout_gravity="right" />
 
                 </LinearLayout>
 

@@ -1,17 +1,20 @@
 package yolo.suaj.alertac;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TabHost;
 
 
 public class MainActivityFragment extends Fragment {
     private TabHost tabHost;
 
+    private Button bmaps;
 
     public MainActivityFragment() {
         // Required empty public constructor
@@ -26,6 +29,14 @@ public class MainActivityFragment extends Fragment {
 
         //Codificación
 
+        bmaps= (Button) view.findViewById(R.id.bmaps);
+        bmaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(),MapsActivity.class);
+                startActivity(i);
+            }
+        });
         //TabHost
         Resources resources = getResources();
         tabHost = (TabHost) view.findViewById(R.id.tabHost);
