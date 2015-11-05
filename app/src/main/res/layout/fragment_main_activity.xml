@@ -39,6 +39,20 @@
                         android:id="@+id/bmaps"
                         android:layout_gravity="center_horizontal" />
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SOS"
+                        android:id="@+id/btnSOS"
+                        android:layout_gravity="center_horizontal" />
+
+                    <WebView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/parrafo_1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.95" />
+
                 </LinearLayout>
 
                 <LinearLayout
