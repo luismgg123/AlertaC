@@ -17,7 +17,7 @@ public class EnvioSMS {
 
     public void envio(){
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage("999956103", null,"hola", null, null);
+        sms.sendTextMessage("996332722", null,"hola", null, null);
         Log.e("Mensaje", "se envio sms");
     }
 }
