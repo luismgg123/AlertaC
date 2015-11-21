@@ -1,5 +1,6 @@
 package yolo.suaj.alertac;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,11 +8,8 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -27,15 +25,9 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivityFragment extends Fragment {
@@ -43,7 +35,7 @@ public class MainActivityFragment extends Fragment {
 
     private WebView parrafo_1, parrafo_2;
     private Button bmaps, btnSOS, bSMS, bFoto, bHistorial;
-    private ImageView iFoto;
+    private ImageView imageViewPhoto;
 
     private Historial historial;
     private TextView textResult;
@@ -64,6 +56,7 @@ public class MainActivityFragment extends Fragment {
 
         //CODIFICACIÓN WEBVIEW VOZ
 
+        imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewPhoto);
         parrafo_1=(WebView) view.findViewById(R.id.parrafo_1);
       //  parrafo_2=(WebView) view.findViewById(R.id.parrafo_2);
 
@@ -82,6 +75,7 @@ public class MainActivityFragment extends Fragment {
 
         WebView webViewNoticia = (WebView) view.findViewById(R.id.webViewNoticia);
         webViewNoticia.loadUrl("https://news.google.com.pe/news?tab=wn&ei=xQBQVrSFMYj1mAHXqLjoCQ&ved=0CAoQqS4oCg#0");
+
 
 
 //////////////////////////BOTON HISTORIAL///////////////////////////////////////
@@ -164,8 +158,10 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(intent.resolveActivity(getActivity().getPackageManager())!=null) {
+                    startActivityForResult(intent, TAKE_PICTURE);
+                }
             }
 
 
@@ -290,34 +286,52 @@ public class MainActivityFragment extends Fragment {
 
 
 
+    static final int TAKE_PICTURE = 1;
 
 
     @Override
      public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
-            ArrayList<String> matches = data.getStringArrayListExtra
-                    (RecognizerIntent.EXTRA_RESULTS);
-            String[] palabras = matches.get(0).toString().split(" ");
-            palabras[0] = "Auxilio";
-            if (palabras[0].equals("Auxilio")) {
 
-                // OBTENER VALORES DE PREFERENCIAS
-                final String a = getPref("pref_contacto", getContext());
-                final  String b= getPref("pref_mensaje", getContext());
+            if (requestCode == TAKE_PICTURE && resultCode == Activity.RESULT_OK) {
+                Bundle bundle = new Bundle();
+                bundle = data.getExtras();
+                Bitmap bitmap;
+                try {
+                    bitmap = (Bitmap) bundle.get("data");
 
-                //  EnvioSMS envioSMS = new EnvioSMS(a, a, "AUXILIO");
+                    imageViewPhoto.setImageBitmap(bitmap);
 
-                // AÑADIR AL HISTORIAL
-                String fecha = obtenerFecha();
-                conexionDB().execSQL("INSERT INTO HISTORIAL (fecha, accion, numero, mensaje) VALUES ('"+ fecha +"', 'VOZ' ,"+ Integer.parseInt(a) +" ,'AUXILIO')");
-                conexionDB().close();
-
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT).show();
+                    Log.e("Camera", e.toString());
+                }
             }
-        }
-    }
 
+
+            if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
+                ArrayList<String> matches = data.getStringArrayListExtra
+                        (RecognizerIntent.EXTRA_RESULTS);
+                String[] palabras = matches.get(0).toString().split(" ");
+                palabras[0] = "Auxilio";
+                if (palabras[0].equals("Auxilio")) {
+
+                    // OBTENER VALORES DE PREFERENCIAS
+                    final String a = getPref("pref_contacto", getContext());
+                    final String b = getPref("pref_mensaje", getContext());
+
+                    //  EnvioSMS envioSMS = new EnvioSMS(a, a, "AUXILIO");
+
+                    // AÑADIR AL HISTORIAL
+                    String fecha = obtenerFecha();
+                    conexionDB().execSQL("INSERT INTO HISTORIAL (fecha, accion, numero, mensaje) VALUES ('" + fecha + "', 'VOZ' ," + Integer.parseInt(a) + " ,'AUXILIO')");
+                    conexionDB().close();
+
+                }
+            }
+
+    }
 
 
     // OBTENER PREFERENCIAS

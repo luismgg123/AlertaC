@@ -26,6 +26,26 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/tab3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tomar Foto"
+                        android:id="@+id/bFoto"
+                        android:layout_gravity="center_horizontal" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imageViewPhoto" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/tab4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -91,26 +111,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textResult"
-                        android:layout_gravity="center_horizontal" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tomar Foto"
-                        android:id="@+id/bFoto"
-                        android:layout_gravity="center_horizontal" />
-
-                    <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/imageViewFoto"
                         android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
