@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_ajustes:
 
-                // User chose the "Settings" item, show the app settings UI...
+                Intent i = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(i);
                 return true;
 
             case R.id.action_configuracion:

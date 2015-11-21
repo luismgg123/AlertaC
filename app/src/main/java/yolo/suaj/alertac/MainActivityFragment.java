@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -20,11 +22,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +39,8 @@ import java.util.Calendar;
 public class MainActivityFragment extends Fragment {
     private TabHost tabHost;
 
-    private WebView parrafo_1, parrafo_2;
-    private Button bmaps, btnSOS, bSMS, bFoto, bHistorial;
+    private Button bHistorial, btnShare;
+    private ImageButton btnSOS, bSMS, bFoto;
     private ImageView imageViewPhoto;
 
     private Historial historial;
@@ -57,18 +63,6 @@ public class MainActivityFragment extends Fragment {
         //CODIFICACIÓN WEBVIEW VOZ
 
         imageViewPhoto = (ImageView) view.findViewById(R.id.imageViewPhoto);
-        parrafo_1=(WebView) view.findViewById(R.id.parrafo_1);
-      //  parrafo_2=(WebView) view.findViewById(R.id.parrafo_2);
-
-        String txt_paragraph_1 = "<html><body><div style=text-align:justify;font-size:12px;color:#000000;>"+
-                "<ul>"+
-                "<li>Partida de Nacimiento original</li>"+
-                "<li>Certificado de Estudios Secundarios Original</li>"+
-                "<li>Dos fotografías tamaño carnet</li>"+
-                "<li>Copia de D.N.I</li>"+
-                "<li>Pago por el Derecho de examen de admisión incluido prospecto. El pago se realiza en la Cuenta en soles del Banco de la Nación a la Cta. Cte. N° 0000284475</li>" +
-                "</ul></div></body></html>";
-       parrafo_1.loadData(txt_paragraph_1, "text/html; charset=utf-8", "UTF-8");
 
 
         //CODIFICACIÓN WEBVIEW NOTICIAS
@@ -106,7 +100,7 @@ public class MainActivityFragment extends Fragment {
 
 
 /////////////////////////BOTON VOZ/////////////////////////////////////
-        btnSOS =(Button) view.findViewById(R.id.btnSOS);
+        btnSOS =(ImageButton) view.findViewById(R.id.btnSOS);
         btnSOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,21 +110,10 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
- /////////////////////////BOTON MAPS///////////////////////////////////////
-
-        bmaps= (Button) view.findViewById(R.id.bmaps);
-        bmaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(),MapsActivity.class);
-                startActivity(i);
-            }
-        });
-
 
 //////////////////////////BOTON SMS///////////////////////////////////////
 
-        bSMS = (Button) view.findViewById(R.id.bSMS);
+        bSMS = (ImageButton) view.findViewById(R.id.bSMS);
         bSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +136,7 @@ public class MainActivityFragment extends Fragment {
 //////////////////////////BOTON FOTO///////////////////////////////////////
 
 
-        bFoto = (Button) view.findViewById(R.id.bFoto);
+        bFoto = (ImageButton) view.findViewById(R.id.bFoto);
         bFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +151,20 @@ public class MainActivityFragment extends Fragment {
         });
 
 
+
+
+//////////////////////////BOTON COMPARTIR/// :v////////////////////////////////////
+
+
+                btnShare = (Button) view.findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareit();
+            }
+
+
+        });
 
 
 
@@ -354,6 +351,42 @@ public class MainActivityFragment extends Fragment {
        return formattedDate;
 
     }
+
+
+
+    //Método Foto
+
+    private void shareit(){
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/png");
+        imageViewPhoto.setDrawingCacheEnabled(true);
+        Bitmap image=imageViewPhoto.getDrawingCache();
+        Uri uri=getLocalBitmapUri(image);
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(share, "Compartir imagen por..."));
+        //ImageView.destroyDrawingCache();
+    }
+    public Uri getLocalBitmapUri(Bitmap bm) {
+        Bitmap bmp = bm;
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+
+    }
+
+
+
 
 
     // INICIALIZACION DE BD
