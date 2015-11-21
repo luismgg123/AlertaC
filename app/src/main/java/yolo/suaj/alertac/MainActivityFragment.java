@@ -1,14 +1,18 @@
 package yolo.suaj.alertac;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
@@ -21,12 +25,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -86,10 +92,10 @@ public class MainActivityFragment extends Fragment {
 
                 textResult.setText("");
                 Cursor c = listarUsuarios(conexionDB());
-                if(c.moveToFirst()){
-                    do{
-                        textResult.append(c.getInt(0)+" - "+c.getString(1)+ "\n");
-                    }while(c.moveToNext());
+                if (c.moveToFirst()) {
+                    do {
+                         textResult.append(c.getString(0) + " : " + c.getString(1) + " -" + c.getInt(2) + " - " + c.getString(3) + "\n");
+                    } while (c.moveToNext());
                 }
 
 
@@ -99,7 +105,7 @@ public class MainActivityFragment extends Fragment {
         });
 
 
-/////////////////////////BOTON sosButton/////////////////////////////////////
+/////////////////////////BOTON VOZ/////////////////////////////////////
         btnSOS =(Button) view.findViewById(R.id.btnSOS);
         btnSOS.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +134,15 @@ public class MainActivityFragment extends Fragment {
         bSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conexionDB().execSQL("INSERT INTO HISTORIAL (numero, mensaje) VALUES (996332722,  'AUXILIO')");
+                // OBTENER VALORES DE PREFERENCIAS
+                final String a = getPref("pref_contacto", getContext());
+                final  String b= getPref("pref_mensaje", getContext());
+
+               //  EnvioSMS envioSMS = new EnvioSMS(a, a, b);
+
+                // AÑADIR AL HISTORIAL
+                String fecha = obtenerFecha();
+                conexionDB().execSQL("INSERT INTO HISTORIAL (fecha, accion, numero, mensaje) VALUES ('"+ fecha +"', 'SMS' ,"+ Integer.parseInt(a) +" ,'" + b + "')");
                 conexionDB().close();
 
 
@@ -143,8 +157,8 @@ public class MainActivityFragment extends Fragment {
         bFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
-                galleryAddPic();
+
+
 
             }
 
@@ -166,26 +180,85 @@ public class MainActivityFragment extends Fragment {
         //Primer TAB
         TabHost.TabSpec spec1 = tabHost.newTabSpec("Tab1");
         spec1.setContent(R.id.tab1);
-        spec1.setIndicator("Voz");
+
+        //Custom tab Indicator: Tiene imagen y texto
+
+        View tabIndicator = LayoutInflater.from(this.getContext()).inflate(R.layout.tab_indicator, tabHost.getTabWidget(), false);
+        ((TextView) tabIndicator.findViewById(R.id.title)).setText("VOZ");
+        ((ImageView) tabIndicator.findViewById(R.id.icon)).setImageResource(R.drawable.micro);
+        spec1.setIndicator(tabIndicator);
+
         tabHost.addTab(spec1);
 
         //Segundo TAB
         TabHost.TabSpec spec2 = tabHost.newTabSpec("Tab2");
         spec2.setContent(R.id.tab2);
-        spec2.setIndicator("SMS");
+
+        //Custom tab Indicator: Tiene imagen y texto
+
+        View tabIndicator2 = LayoutInflater.from(this.getContext()).inflate(R.layout.tab_indicator, tabHost.getTabWidget(), false);
+        ((TextView) tabIndicator2.findViewById(R.id.title)).setText("SMS");
+        ((ImageView) tabIndicator2.findViewById(R.id.icon)).setImageResource(R.drawable.sms);
+        spec2.setIndicator(tabIndicator2);
+
         tabHost.addTab(spec2);
 
         //Tercer TAB
         TabHost.TabSpec spec3 = tabHost.newTabSpec("Tab3");
         spec3.setContent(R.id.tab3);
-        spec3.setIndicator("Foto");
+
+        //Custom tab Indicator: Tiene imagen y texto
+
+        View tabIndicator3 = LayoutInflater.from(this.getContext()).inflate(R.layout.tab_indicator, tabHost.getTabWidget(), false);
+        ((TextView) tabIndicator3.findViewById(R.id.title)).setText("FOTO");
+        ((ImageView) tabIndicator3.findViewById(R.id.icon)).setImageResource(R.drawable.foto);
+        spec3.setIndicator(tabIndicator3);
         tabHost.addTab(spec3);
 
         //Cuarto TAB
         TabHost.TabSpec spec4 = tabHost.newTabSpec("Tab4");
         spec4.setContent(R.id.tab4);
-        spec4.setIndicator("Noticia");
+
+        //Custom tab Indicator: Tiene imagen y texto
+
+        View tabIndicator4 = LayoutInflater.from(this.getContext()).inflate(R.layout.tab_indicator, tabHost.getTabWidget(), false);
+        ((TextView) tabIndicator4.findViewById(R.id.title)).setText("NOTICIA");
+        ((ImageView) tabIndicator4.findViewById(R.id.icon)).setImageResource(R.drawable.noticia);
+        spec4.setIndicator(tabIndicator4);
         tabHost.addTab(spec4);
+
+
+
+
+
+        //INICIALIZACIÓN DE COLORES
+
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            tabHost.getTabWidget().getChildAt(i)
+                    .setBackgroundColor(Color.parseColor("#DB6060")); // un selected
+        }
+
+        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab())
+                .setBackgroundColor(Color.parseColor("#db2020")); //selected
+
+
+        //////////////////////////COLOR DE LOS TABS ///////////////////////////////////////
+
+
+
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+
+            public void onTabChanged(String arg0) {
+                for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+                    tabHost.getTabWidget().getChildAt(i)
+                            .setBackgroundColor(Color.parseColor("#DB6060")); // un selected
+                }
+
+                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab())
+                        .setBackgroundColor(Color.parseColor("#db2020")); // selected
+
+            }
+        });
 
         return view;
     }
@@ -193,7 +266,10 @@ public class MainActivityFragment extends Fragment {
 
 
 
+    //////////////////////////METODOS USADOS EN BOTONES ///////////////////////////////////////
 
+
+    //VOZ
 
     private void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -219,15 +295,47 @@ public class MainActivityFragment extends Fragment {
             String[] palabras = matches.get(0).toString().split(" ");
             palabras[0] = "Auxilio";
             if (palabras[0].equals("Auxilio")) {
-                EnvioSMS envioSMS = new EnvioSMS("996332722", "996332722", "AUXILIO");
+
+                // OBTENER VALORES DE PREFERENCIAS
+                final String a = getPref("pref_contacto", getContext());
+                final  String b= getPref("pref_mensaje", getContext());
+
+                //  EnvioSMS envioSMS = new EnvioSMS(a, a, "AUXILIO");
+
+                // AÑADIR AL HISTORIAL
+                String fecha = obtenerFecha();
+                conexionDB().execSQL("INSERT INTO HISTORIAL (fecha, accion, numero, mensaje) VALUES ('"+ fecha +"', 'VOZ' ,"+ Integer.parseInt(a) +" ,'AUXILIO')");
+                conexionDB().close();
+
             }
         }
     }
 
 
 
+    // OBTENER PREFERENCIAS
+
+    public static String getPref(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, null);
+    }
 
 
+    //OBTENER FECHA
+
+    public String obtenerFecha() {
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time =&gt; " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String formattedDate = df.format(c.getTime());
+// Now formattedDate have current date/time
+       return formattedDate;
+
+    }
+
+
+    // INICIALIZACION DE BD
 
     private void createDB(){
 
@@ -245,78 +353,12 @@ public class MainActivityFragment extends Fragment {
     }
 
     private Cursor listarUsuarios(SQLiteDatabase access){
-        String[] camposDevolver = new String[]{"numero","mensaje"};
+        String[] camposDevolver = new String[]{"fecha", "accion", "numero","mensaje"};
         Cursor c = access.query("HISTORIAL", camposDevolver, null, null, null, null, null,"15");
 
         return c;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    String mCurrentPhotoPath;
-
-
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-
-    static final int REQUEST_TAKE_PHOTO = 1;
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.getActivity().sendBroadcast(mediaScanIntent);
-
-    }
 
 
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Preferencias">
+
+
+
+    <PreferenceCategory
+        android:title="Ajustes">
+
+
+        <EditTextPreference
+            android:key="pref_contacto"
+            android:title="Contacto de Emergencia"
+            android:summary="123345"
+            android:dialogTitle="Ingrese numero de contacto"
+            />
+
+        <EditTextPreference
+            android:key="pref_mensaje"
+            android:title="Mensaje de Ayuda"
+            android:summary="Ayuda"
+            android:dialogTitle="Ingrese Mensaje de Ayuda"
+            />
+
+
+    </PreferenceCategory>
+
+    <Preference
+        android:title="Intent"
+        android:summary="Open a webpage">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://android-elements.blogspot.com/" />
+
+    </Preference>
+
+</PreferenceScreen>
