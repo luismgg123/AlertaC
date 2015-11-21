@@ -32,52 +32,42 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageButton
-                        android:layout_width="wrap_content"
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/bFoto"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/btnfoto"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center">
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="COMPARTIR"
-                        android:id="@+id/btnShare"
-                        android:singleLine="false"
-                        android:layout_gravity="right" />
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bFoto"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/btnfoto"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="70dp" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnShare"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/btnshare"
+                            android:layout_marginLeft="15dp" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bUp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/btnup"
+                            android:layout_marginLeft="15dp" />
+
+                    </TableRow>
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/imageViewPhoto" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1">
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btnSOS"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/btnsos"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="0.5" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView"
-                        android:layout_weight="0.5"
-                        android:src="@drawable/anunciovoz"
-                        android:layout_gravity="center_horizontal" />
 
                 </LinearLayout>
 
@@ -117,6 +107,32 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/textResult"
                         android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSOS"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/btnsos"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.5" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView"
+                        android:layout_weight="0.5"
+                        android:src="@drawable/anunciovoz"
+                        android:layout_gravity="center_horizontal" />
+
                 </LinearLayout>
 
                 <LinearLayout

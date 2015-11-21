@@ -39,15 +39,17 @@ import java.util.Calendar;
 public class MainActivityFragment extends Fragment {
     private TabHost tabHost;
 
-    private Button bHistorial, btnShare;
-    private ImageButton btnSOS, bSMS, bFoto;
+    private Button bHistorial;
+    private ImageButton btnSOS, bSMS, bFoto,  btnShare, bUp;
     private ImageView imageViewPhoto;
 
     private Historial historial;
     private TextView textResult;
 
+    private static final int LOAD_PICTURE = 2;
     private static final String TAG = "VoiceRecognition";
 
+    Uri imageUri;
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     public MainActivityFragment() {
         // Required empty public constructor
@@ -88,7 +90,7 @@ public class MainActivityFragment extends Fragment {
                 Cursor c = listarUsuarios(conexionDB());
                 if (c.moveToFirst()) {
                     do {
-                         textResult.append(c.getString(0) + " : " + c.getString(1) + " -" + c.getInt(2) + " - " + c.getString(3) + "\n");
+                        textResult.append(c.getString(0) + " : " + c.getString(1) + " -" + c.getInt(2) + " - " + c.getString(3) + "\n");
                     } while (c.moveToNext());
                 }
 
@@ -156,7 +158,7 @@ public class MainActivityFragment extends Fragment {
 //////////////////////////BOTON COMPARTIR/// :v////////////////////////////////////
 
 
-                btnShare = (Button) view.findViewById(R.id.btnShare);
+                btnShare = (ImageButton) view.findViewById(R.id.btnShare);
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +167,28 @@ public class MainActivityFragment extends Fragment {
 
 
         });
+
+
+
+
+
+        //////////////////////////BOTON SUBIR// :v////////////////////////////////////
+
+
+        bUp= (ImageButton) view.findViewById(R.id.bUp);
+        bUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Contact Image"),LOAD_PICTURE);
+            }
+
+
+        });
+
+
 
 
 
@@ -307,6 +331,11 @@ public class MainActivityFragment extends Fragment {
             }
 
 
+
+        if(requestCode == LOAD_PICTURE && resultCode == Activity.RESULT_OK){
+            imageUri = data.getData();
+            imageViewPhoto.setImageURI(data.getData());
+        }
             if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
                 ArrayList<String> matches = data.getStringArrayListExtra
                         (RecognizerIntent.EXTRA_RESULTS);

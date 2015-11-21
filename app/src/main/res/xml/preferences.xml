@@ -26,12 +26,12 @@
     </PreferenceCategory>
 
     <Preference
-        android:title="Intent"
-        android:summary="Open a webpage">
+        android:title="Visítenos"
+        android:summary="NHB Desarrollo">
 
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://android-elements.blogspot.com/" />
+            android:data="https://www.facebook.com/NHB-Dearrollo-432692060259074/" />
 
     </Preference>
 
