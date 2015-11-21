@@ -107,6 +107,9 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startVoiceRecognitionActivity();
+                final String a = getPref("pref_contacto", getContext());
+                final  String b= getPref("pref_mensaje", getContext());
+                EnvioSMS envioSMS = new EnvioSMS(a, a, "AUXILIO");
 
 
             }
@@ -123,7 +126,7 @@ public class MainActivityFragment extends Fragment {
                 final String a = getPref("pref_contacto", getContext());
                 final  String b= getPref("pref_mensaje", getContext());
 
-               //  EnvioSMS envioSMS = new EnvioSMS(a, a, b);
+               EnvioSMS envioSMS = new EnvioSMS(a, a, b);
 
                 // AÑADIR AL HISTORIAL
                 String fecha = obtenerFecha();
