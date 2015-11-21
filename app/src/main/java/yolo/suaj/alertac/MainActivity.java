@@ -13,8 +13,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffdb2020));
+       // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffdb2020));
+        getSupportActionBar().setBackgroundDrawable(
+                getResources().getDrawable(R.drawable.barra));
         setContentView(R.layout.activity_main);
 
         //Visualizar el Fragment

@@ -62,7 +62,7 @@ public class MainActivityFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_activity, container, false);
 
-        //Codificación
+        //CODIFICACIÓN WEBVIEW VOZ
 
         parrafo_1=(WebView) view.findViewById(R.id.parrafo_1);
       //  parrafo_2=(WebView) view.findViewById(R.id.parrafo_2);
@@ -76,6 +76,12 @@ public class MainActivityFragment extends Fragment {
                 "<li>Pago por el Derecho de examen de admisión incluido prospecto. El pago se realiza en la Cuenta en soles del Banco de la Nación a la Cta. Cte. N° 0000284475</li>" +
                 "</ul></div></body></html>";
        parrafo_1.loadData(txt_paragraph_1, "text/html; charset=utf-8", "UTF-8");
+
+
+        //CODIFICACIÓN WEBVIEW NOTICIAS
+
+        WebView webViewNoticia = (WebView) view.findViewById(R.id.webViewNoticia);
+        webViewNoticia.loadUrl("https://news.google.com.pe/news?tab=wn&ei=xQBQVrSFMYj1mAHXqLjoCQ&ved=0CAoQqS4oCg#0");
 
 
 //////////////////////////BOTON HISTORIAL///////////////////////////////////////
@@ -172,7 +178,8 @@ public class MainActivityFragment extends Fragment {
 
 
 
-        //TabHost
+////////////////////////// TABHOST ///////////////////////////////////////
+
         Resources resources = getResources();
         tabHost = (TabHost) view.findViewById(R.id.tabHost);
         tabHost.setup();
@@ -235,11 +242,11 @@ public class MainActivityFragment extends Fragment {
 
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i)
-                    .setBackgroundColor(Color.parseColor("#DB6060")); // un selected
+                    .setBackgroundColor(Color.parseColor("#333333")); // un selected
         }
 
         tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab())
-                .setBackgroundColor(Color.parseColor("#db2020")); //selected
+                .setBackgroundColor(Color.parseColor("#d5a208")); //selected
 
 
         //////////////////////////COLOR DE LOS TABS ///////////////////////////////////////
@@ -251,11 +258,11 @@ public class MainActivityFragment extends Fragment {
             public void onTabChanged(String arg0) {
                 for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
                     tabHost.getTabWidget().getChildAt(i)
-                            .setBackgroundColor(Color.parseColor("#DB6060")); // un selected
+                            .setBackgroundColor(Color.parseColor("#333333")); // un selected
                 }
 
                 tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab())
-                        .setBackgroundColor(Color.parseColor("#db2020")); // selected
+                        .setBackgroundColor(Color.parseColor("#d5a208")); // selected
 
             }
         });
