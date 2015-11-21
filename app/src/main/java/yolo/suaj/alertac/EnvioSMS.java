@@ -8,6 +8,7 @@ import android.util.Log;
  */
 public class EnvioSMS {
     String telefono, contacto, mensaje;
+
     public EnvioSMS(String xtelefono, String xcontacto, String xmensaje){
         telefono=xtelefono;
         contacto=xcontacto;
